@@ -51,7 +51,7 @@ adelaide_offence_level_3 <- function(crime_data, offence_description, suburbs) {
   # You will need to filter, summarise and group by
   # Expect cols: "date", "suburb", "total_offence_count"
   plot_data <- crime_data[suburb %in% c(suburbs[1], suburbs[2]) &  offence_level_3 == offence_description,
-                          list(total_offence_count = sum(offence_count),suburb),
+                          list(total_offence_count = sum(crime_data$offence_count),suburb),
                           by = date]
 
   # These lines will transform the plot_data structure to allow us to plot
