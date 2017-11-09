@@ -1,0 +1,88 @@
+---
+title: "RmarkDown_HW2"
+author: "Vivek Pawar"
+date: "9 November 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Aim
+ 
+The Aim of the project is to analyse the data and find co-orelation in level 3 offence like "'OFFENCES AGAINST PROPERTY" in two suburbs such as "GRANGE", "SEATON" over a period of five years.
+
+```{r library_dataPrep, warning=FALSE,message=FALSE}
+##installing and loading all the required libraries
+library(devtools)
+devtools::install_github("Vivek3107/prfavpawar")
+library(prfavpawar)
+library(readxl)
+library(data.table)
+library(dplyr)
+library(knitr)
+require(ggplot2)
+library(cowplot)
+```
+
+## Results
+
+Below are the results of the analysis:
+
+Criminal Statistics 2012-2013 preview Using Knitr kable
+
+```{r knitr_table, echo=FALSE,warning=FALSE,message=FALSE}
+
+## Creating a table using  knitr::kable
+options(knitr.table.format = "html") 
+crime_2012 <- setDT(read_xlsx("./data/crime-statistics-2012-13.xlsx"))
+setnames(crime_2012, c("date", "suburb", "postcode", "offence_level_1",
+                  "offence_level_2", "offence_level_3", "offence_count"))
+knitr::kable(crime_2012[1:5,], caption = "crime-statistics-2012-13")
+
+offence <- "OFFENCES AGAINST PROPERTY"
+vec <- c("GRANGE","SEATON")
+
+```
+
+
+Loading the data
+
+```{r setting_data}
+
+##Loading the data
+crime_2013 <- setDT(read_xlsx("./data/crime-statistics-2013-14.xlsx"))
+crime_2014 <- setDT(read_xlsx("./data/crime-statistics-2014-15.xlsx"))
+crime_2015 <- setDT(read_xlsx("./data/crime-statistics-2015-16.xlsx"))
+crime_2016 <- setDT(read_xlsx("./data/crime-statistics-2016-17.xlsx"))
+setnames(crime_2013, c("date", "suburb", "postcode", "offence_level_1",
+                       "offence_level_2", "offence_level_3", "offence_count"))
+setnames(crime_2014, c("date", "suburb", "postcode", "offence_level_1",
+                       "offence_level_2", "offence_level_3", "offence_count"))
+setnames(crime_2015, c("date", "suburb", "postcode", "offence_level_1",
+                       "offence_level_2", "offence_level_3", "offence_count"))
+setnames(crime_2016, c("date", "suburb", "postcode", "offence_level_1",
+                       "offence_level_2", "offence_level_3", "offence_count"))
+```
+
+## Including Cow Plot
+
+```{r plotting}
+#plotting the data
+plot_2012 <- adelaide_offence_level_3(crime_2012,offence,vec)
+plot_2013 <- adelaide_offence_level_3(crime_2013,offence,vec)
+plot_2014 <- adelaide_offence_level_3(crime_2014,offence,vec)
+plot_2015 <- adelaide_offence_level_3(crime_2015,offence,vec)
+plot_2016 <- adelaide_offence_level_3(crime_2016,offence,vec)
+cowplot::plot_grid(plot_2012, plot_2012,plot_2014,plot_2015,plot_2016, ncol = 2, 
+          align = 'h', axis = 'l')
+```
+
+
+
+
+
+
+## Discussion 
+
+This above plot shows the  counts of offence at each location, then maps the count to point area. It helps in representing the discrete data and shows that the number of co-occurance of offence "against the property" in both the suburbs "Grange and Seaton" that have occured in the period of 5 years.
